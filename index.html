@@ -33,23 +33,52 @@
 
 </body>
 <script>
-    var header=document.getElementById('main-header');
-    header.style.borderBottom='solid 3px black';
-    var head=document.getElementsByClassName('title');
-    head[0].innerHTML='<b>Add Items</b>';
-    head[0].style.color='green';
+    // var header=document.getElementById('main-header');
+    // header.style.borderBottom='solid 3px black';
+    // var head=document.getElementsByClassName('title');
+    // head[0].innerHTML='<b>Add Items</b>';
+    // head[0].style.color='green';
     //query and auery select All
-    var item2=document.querySelector('.list-group-item:nth-child(2)');
-    item2.style.background='green';
-    var item3=document.querySelector('.list-group-item:nth-child(3)');
-    item3.style.display='none';
+    // var item2=document.querySelector('.list-group-item:nth-child(2)');
+    // item2.style.background='green';
+    // var item3=document.querySelector('.list-group-item:nth-child(3)');
+    // item3.style.display='none';
 
-    var items=document.querySelectorAll('.list-group-item');
-    items[1].style.color='lightgreen';
-    var odds=document.querySelectorAll('.list-group-item:nth-child(odd)');
-    for(let i=0;i<odds.length;i++){
-        odds[i].style.background='lightblue';
-    }
+    // var items=document.querySelectorAll('.list-group-item');
+    // items[1].style.color='lightgreen';
+    // var odds=document.querySelectorAll('.list-group-item:nth-child(odd)');
+    // for(let i=0;i<odds.length;i++){
+    //     odds[i].style.background='lightblue';
+    // }
+    var selct=document.querySelector('ul');
+    console.log(selct.parentElement);
+    console.log(selct.childNodes);
+    console.log(selct.children);
+    console.log(selct.children[1]);
+    console.log(selct.lastElementChild.textContent);
+    console.log(selct.lastChild.textContent);
+    console.log(selct.nextSibling);
+    console.log(selct.nextElementSibling);
+    console.log(selct.previousElementSibling);
+    var nod=document.createElement('span');
+    
+
+    var new_div=document.createElement('div');
+    new_div.class='hello';
+    new_div.id="Hello";
+    var cont_text=document.createTextNode('Hello');
+    new_div.appendChild(cont_text);
+    new_div.style.fontSize='20px';
+
+    var list=document.querySelector('header .container');
+    var h1=document.querySelector(' header h1');
+        list.insertBefore(new_div,h1)
+    
+
+    var items=document.querySelector('div #items');
+    var item=document.querySelector('div li');
+    items.insertBefore(new_div,item);
+    
     
 
 </script>
