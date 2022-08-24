@@ -26,16 +26,17 @@
    <div id="main" class="card card-body">
     <h2 class="title">Add Items</h2>
     <form id="addForm" class="form-inline mb-3">
-      <input type="text" class="form-control mr-2" id="item">
+      <input type="text" class="form-control mr-2" id="item" placeholder="Enter Item Name">
+      <input type="text" class="form-control mr-2" id="descrption" placeholder="Enter Description">
       <input type="submit" class="btn btn-dark" value="Submit">
     </form>
     <h2 class="title">Items</h2>
     <ul id="items" class="list-group">
         <input id="editing" type="text" placeholder="Enter new name" style="display:none; border: 2px solid red;">
-      <li class="list-group-item">Item 1 <button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm btn-success float-right Edit">Edit</button></li>
-      <li class="list-group-item">Item 2 <button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm btn-success float-right Edit">Edit</button></li>
-      <li class="list-group-item">Item 3 <button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right btn-success Edit">Edit</button></li>
-      <li class="list-group-item">Item 4 <button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right btn-success Edit">Edit</button></li>
+      <li class="list-group-item">Item 1<samll class="form-text text-muted">description1</samll> <button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm btn-success float-right Edit">Edit</button></li>
+      <li class="list-group-item">Item 2 <samll class="form-text text-muted">description2</samll><button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm btn-success float-right Edit">Edit</button></li>
+      <li class="list-group-item">Item 3 <samll class="form-text text-muted">description3</samll><button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right btn-success Edit">Edit</button></li>
+      <li class="list-group-item">Item 4 <samll class="form-text text-muted">description4</samll><button class="btn btn-danger btn-sm float-right delete">X</button><button class="btn btn-sm float-right btn-success Edit">Edit</button></li>
     </ul>
    </div>
   </div>
@@ -44,27 +45,46 @@
     var items=document.querySelector('#items');
     var form =document.querySelector('#addForm');
     var lst=document.querySelectorAll('.list-group-item');
+    var filt=document.querySelector('#filter');
 
     //event for form submit
     form.addEventListener('submit',addItem);
     items.addEventListener('click',dlt_item);
     items.addEventListener('click',edit_item);
+    filter.addEventListener('keyup',filtering);
+
+
     //defining additem help adding item
     function addItem(e){
         e.preventDefault();
         var nme=document.querySelector('#item');
+        var desc=document.querySelector('#descrption');
         //creating list with class
         var li=document.createElement('li');
         li.className='list-group-item';
         li.appendChild(document.createTextNode(nme.value));
+
+        var sml=document.createElement('small');
+        sml.className='form-text text-muted';
+        sml.appendChild(document.createTextNode(desc.value));
+        
+        
         // console.log(li);
         //creating button to add inside list
         var btn=document.createElement('button');
         btn.className='btn btn-danger btn-sm float-right delete';
         btn.appendChild(document.createTextNode('X'));
+
+        var edt_btn=document.createElement('button');
+        edt_btn.className='btn btn-sm float-right btn-success Edit';
+        edt_btn.appendChild(document.createTextNode('Edit'));
         
-        li.appendChild(btn);
+        li.appendChild(sml);
+        li.appendChild(btn); 
+        li.appendChild(edt_btn);
+               
         items.appendChild(li);
+        
     }
     
     function dlt_item(e){
@@ -91,6 +111,23 @@
             
             
         }
+        
+    }
+    function filtering(e){
+        var text=e.target.value.toLowerCase();
+        var data=items.getElementsByTagName('li');
+        var descip=items.getElementsByTagName('samll');
+        
+        Array.from(data).forEach(function (item){
+            var dataList=item.firstChild.textContent;
+            var descpData=item.firstChild.nextSibling.textContent;
+            
+            if (dataList.toLowerCase().indexOf(text)!=-1 || descpData.toLowerCase().indexOf(text)!=-1){
+                item.style.display='block';
+            }else{
+                item.style.display='none';
+            }
+        })
         
     }
 </script>
