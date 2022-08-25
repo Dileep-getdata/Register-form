@@ -31,6 +31,9 @@
         </form>
         
        </div>
+       <ul id="data-list">
+
+       </ul>
       </div>
     
 </body>
@@ -43,15 +46,26 @@
         var nmeInput=document.getElementById('name');
         var emailInput=document.getElementById('email');
         var passwordInput=document.getElementById('password');
-        localStorage.setItem('name',nmeInput.value);
-        localStorage.setItem('email',emailInput.value);
-        localStorage.setItem('password',passwordInput.value);
+        let my_obj={
+            'name':nmeInput.value,
+            'email':emailInput.value,
+            'password':passwordInput.value
+    };
+        let myobj_serialize=JSON.stringify(my_obj);
+        localStorage.setItem('my_obj',myobj_serialize);
+      
 
         nmeInput.value="";
         emailInput.value="";
         passwordInput.value="";
         
     }
+    var get_data=JSON.parse(localStorage.getItem('my_obj'));
+    let represent=document.getElementById('data-list');
+    let li=document.createElement('li');
+    li.appendChild(document.createTextNode(get_data.name+', '+get_data.email+', '+get_data.password));
+    represent.appendChild(li);
+    console.log(get_data);
 </script>
 </html>
   
