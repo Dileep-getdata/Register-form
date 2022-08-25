@@ -31,7 +31,7 @@
         </form>
         
        </div>
-       <ul id="data-list">
+       <ul class="mb-3" id="data-list">
 
        </ul>
       </div>
@@ -52,7 +52,7 @@
             'password':passwordInput.value
     };
         let myobj_serialize=JSON.stringify(my_obj);
-        localStorage.setItem('my_obj',myobj_serialize);
+        localStorage.setItem(my_obj.email,myobj_serialize);
       
 
         nmeInput.value="";
@@ -60,12 +60,21 @@
         passwordInput.value="";
         
     }
-    var get_data=JSON.parse(localStorage.getItem('my_obj'));
-    let represent=document.getElementById('data-list');
-    let li=document.createElement('li');
-    li.appendChild(document.createTextNode(get_data.name+', '+get_data.email+', '+get_data.password));
-    represent.appendChild(li);
-    console.log(get_data);
+    for(let i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);
+        var get_data=JSON.parse(localStorage.getItem(key));
+        let represent=document.getElementById('data-list');
+        let li=document.createElement('li');
+        li.className='form-control ';
+        li.appendChild(document.createTextNode(get_data.name+', '+get_data.email+', '+get_data.password));
+        represent.appendChild(li);
+    }
+  
+
+
+    
+
+    
 </script>
 </html>
   
