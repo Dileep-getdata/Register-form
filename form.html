@@ -59,15 +59,33 @@
         emailInput.value="";
         passwordInput.value="";
         
-    }
+    
     for(let i=0;i<localStorage.length;i++){
         var key=localStorage.key(i);
         var get_data=JSON.parse(localStorage.getItem(key));
+        display(get_data);
+    }
+}
+    function display(data_obj){
+        if(localStorage.getItem(data_obj.email)!==null){
+            invisibleing(data_obj.email);
+        }
         let represent=document.getElementById('data-list');
-        let li=document.createElement('li');
-        li.className='form-control ';
-        li.appendChild(document.createTextNode(get_data.name+', '+get_data.email+', '+get_data.password));
-        represent.appendChild(li);
+        const li=`<li class="form-control" id=${data_obj.email}>${data_obj.name} - ${data_obj.email} - ${data_obj.password}<button onclick="delUser('${data_obj.email}')" id="dlt_user" style="float:right;">Delete</button></li>`;
+        represent.innerHTML=represent.innerHTML+li;
+    }
+    function delUser(email){
+        localStorage.removeItem(email);
+        invisibleing(email);
+        console.log(email);
+    }
+    function invisibleing(user){
+        let represent=document.getElementById('data-list');
+        let child_user=document.getElementById(user);
+        if(child_user){
+            represent.removeChild(child_user);
+        }
+        
     }
   
 
