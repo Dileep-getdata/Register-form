@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+
+    <title>Document</title>
+</head>
+<body >   
+   <div>
+    <form method="POST" id="addform" >
+        <label for="ammount">Choose Expense Amount:</label>
+        <input id="ammount" name="ammount" type="text"> &nbsp;&nbsp;
+        <label for="description">Choose Description:</label>
+        <input id="description" name="description" type="text"> &nbsp;&nbsp;
+        <label for="category">Choose Category: </label>
+        <select name="category" id="category">
+            <option value="fuel">Fuel</option>
+            <option value="electricity">Electricity</option>
+            <option value="food">Food</option>
+            <option value="movie">Movie</option>
+        </select>&nbsp;&nbsp;
+        <button type="submit" id="add-Btn">Add Expense</button>
+    </form>
+    
+   </div>
+   <div >
+    <form id="edit_form" style="display: none;">
+        <label for="edit_ammount">Amount:</label>
+        <input id="edit_ammount" name="edit_ammount" type="text"> &nbsp;
+        <label for="edit_description">Description:</label>
+        <input id="edit_description" name="edit_description" type="text"> &nbsp;
+        <label for="edit_category">Category: </label>
+        <select name="edit_category" id="edit_category">
+            <option value="Fuel">Fuel</option>
+            <option value="Electricity">Electricity</option>
+            <option value="Food">Food</option>
+            <option value="Movie">Movie</option>
+        </select>&nbsp;
+        <button type="submit" id="edit-Btn">Edit Expense</button>
+
+    </form><br>
+    <ul id="Expense_list">
+        <li class="itemList"><strong>Ammount - Description - Category</strong></li><br> 
+
+        
+    </ul>
+
+   </div>
+    
+</body>
+
+<script>
+    var myform=document.getElementById('addform');
+    
+    myform.addEventListener('submit',addDetails);
+    function addDetails(e){
+        e.preventDefault();
+        var ammountI=document.getElementById('ammount');
+        var descriptionI=document.getElementById('description');
+        var categoryI=document.getElementById('category');
+        let my_obj={
+            'ammount':ammountI.value,
+            'description':descriptionI.value,
+            'category':categoryI.value
+        };
+        let myobj_serialize=JSON.stringify(my_obj);
+        localStorage.setItem(my_obj.description,myobj_serialize);
+      
+
+        ammountI.value="";
+        descriptionI.value="";
+        // categoryI.value="";
+    }
+        
+    document.addEventListener('DOMContentLoaded', (event) => {
+        for(let i=0;i<localStorage.length;i++){
+            var key=localStorage.key(i);
+            var get_data=JSON.parse(localStorage.getItem(key));
+            display(get_data);
+        }   
+
+        function display(data_obj){
+            if(localStorage.getItem(data_obj.description)!==null){
+                invisibleing(data_obj.description);
+            }
+            let represent=document.getElementById('Expense_list');
+            const li=`<li class="itemList" id=${data_obj.description}>${data_obj.ammount} - ${data_obj.description} - ${data_obj.category}
+                <button onclick="delUser('${data_obj.description}')" id="dlt_user" style="float:right;">Delete</button>
+                <button onclick="editUser('${data_obj.description}')" id="edit_user" style="float:right;">Edit expense</button>
+                </li><br>`;
+            represent.innerHTML=represent.innerHTML+li;
+        }
+});
+    function editUser(description){
+        let addedList=document.getElementById('Expense_list').style.display="none";
+        let addform=document.getElementById('addform').style.display="none";
+        let editForm=document.getElementById('edit_form').style.display="inline";        
+
+        let ed_ammount=document.getElementById("edit_ammount");
+        let ed_description=document.getElementById("edit_description");
+        let ed_category=document.getElementById("edit_category");
+
+        let ammount_val=JSON.parse(localStorage.getItem(description)).ammount;
+        let description_val=JSON.parse(localStorage.getItem(description)).description;
+        let caegory_val=JSON.parse(localStorage.getItem(description)).category;
+
+        ed_ammount.value=ammount_val;
+        ed_description.value=description_val;
+        ed_category.value=caegory_val;
+        console.log(ammount_val);
+
+        let ed_form=document.getElementById('edit_form');
+        ed_form.addEventListener('submit',editDetails);
+        function editDetails(){
+            delUser(description);
+
+            let my_editObj={
+            'ammount':ed_ammount.value,
+            'description':ed_description.value,
+            'category':ed_category.value
+        };
+        let myEditObj_serialize=JSON.stringify(my_editObj);
+        localStorage.setItem(my_editObj.description,myEditObj_serialize);
+    }
+    }
+    
+    function delUser(description){
+        localStorage.removeItem(description);
+        invisibleing(description);
+        console.log(description);
+    }
+    function invisibleing(user){
+        let represent=document.getElementById('Expense_list');
+        let child_user=document.getElementById(user);
+        if(child_user){
+            represent.removeChild(child_user);
+        }
+        
+    }
+
+    
+</script>
+</html>
+  
