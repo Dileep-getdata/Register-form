@@ -69,7 +69,9 @@
         // let myobj_serialize=JSON.stringify(my_obj);
         // localStorage.setItem(my_obj.description,myobj_serialize);
         axios.post("https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails",my_obj)
-        .then((response)=>{console.log(response)})
+        .then((response)=>{
+            console.log(response.data)
+            display(response.data)})
         .catch((err)=>{console.log(err)});
       
 
@@ -79,24 +81,33 @@
     }
         
     document.addEventListener('DOMContentLoaded', (event) => {
-        for(let i=0;i<localStorage.length;i++){
-            var key=localStorage.key(i);
-            var get_data=JSON.parse(localStorage.getItem(key));
-            display(get_data);
-        }   
-
-        function display(data_obj){
-            if(localStorage.getItem(data_obj.description)!==null){
-                invisibleing(data_obj.description);
+        axios.get("https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails")
+        .then((response)=>{
+            for(var i=0;i<response.data.length;i++){
+                // console.log(typeof(response.data._id));
+                display(response.data[i]);
             }
+        })
+        .catch((err)=>{console.log(err)});
+        // for(let i=0;i<localStorage.length;i++){
+        //     var key=localStorage.key(i);
+        //     var get_data=JSON.parse(localStorage.getItem(key));
+        //     display(get_data);
+        // }  
+       
+});
+
+function display(data_obj){
+            // if(localStorage.getItem(data_obj.description)!==null){
+            //     invisibleing(data_obj.description);
+            // }
             let represent=document.getElementById('Expense_list');
-            const li=`<li class="itemList" id=${data_obj.description}>${data_obj.ammount} - ${data_obj.description} - ${data_obj.category}
-                <button onclick="delUser('${data_obj.description}')" id="dlt_user" style="float:right;">Delete</button>
-                <button onclick="editUser('${data_obj.description}')" id="edit_user" style="float:right;">Edit expense</button>
+            const li=`<li class="itemList" id=${data_obj._id}>${data_obj.ammount} - ${data_obj.description} - ${data_obj.category}
+                <button onclick="delUser('${data_obj._id}')" id="dlt_user" style="float:right;">Delete</button>
+                <button onclick="editUser('${data_obj._id}')" id="edit_user" style="float:right;">Edit expense</button>
                 </li><br>`;
             represent.innerHTML=represent.innerHTML+li;
         }
-});
     function editUser(description){
         let addedList=document.getElementById('Expense_list').style.display="none";
         let addform=document.getElementById('addform').style.display="none";
@@ -131,7 +142,8 @@
     }
     
     function delUser(description){
-        localStorage.removeItem(description);
+        // localStorage.removeItem(description);
+        axios.delete(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`)
         invisibleing(description);
         console.log(description);
     }
