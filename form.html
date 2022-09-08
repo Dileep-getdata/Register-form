@@ -84,7 +84,7 @@
         axios.get("https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails")
         .then((response)=>{
             for(var i=0;i<response.data.length;i++){
-                // console.log(typeof(response.data._id));
+                // console.log(JSON.parse(response.data[i]._id));
                 display(response.data[i]);
             }
         })
@@ -117,27 +117,31 @@ function display(data_obj){
         let ed_description=document.getElementById("edit_description");
         let ed_category=document.getElementById("edit_category");
 
-        let ammount_val=JSON.parse(localStorage.getItem(description)).ammount;
-        let description_val=JSON.parse(localStorage.getItem(description)).description;
-        let caegory_val=JSON.parse(localStorage.getItem(description)).category;
+        // let ammount_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
+        // let description_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
+        // let caegory_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
 
-        ed_ammount.value=ammount_val;
-        ed_description.value=description_val;
-        ed_category.value=caegory_val;
-        console.log(ammount_val);
+        // ed_ammount.value=ammount_val;
+        // ed_description.value=description_val;
+        // ed_category.value=caegory_val;
+        // console.log(ammount_val);
 
         let ed_form=document.getElementById('edit_form');
         ed_form.addEventListener('submit',editDetails);
         function editDetails(){
-            delUser(description);
-
+            // delUser(description);
             let my_editObj={
             'ammount':ed_ammount.value,
             'description':ed_description.value,
             'category':ed_category.value
         };
-        let myEditObj_serialize=JSON.stringify(my_editObj);
-        localStorage.setItem(my_editObj.description,myEditObj_serialize);
+        axios.put(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`,my_editObj)
+        .then((response)=>{
+            // console.log(response.data)
+            display(response.data)})
+        .catch((err)=>{console.log(err)});
+        // let myEditObj_serialize=JSON.stringify(my_editObj);
+        // localStorage.setItem(my_editObj.description,myEditObj_serialize);
     }
     }
     
