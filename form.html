@@ -68,9 +68,9 @@
         };
         // let myobj_serialize=JSON.stringify(my_obj);
         // localStorage.setItem(my_obj.description,myobj_serialize);
-        axios.post("https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails",my_obj)
+        axios.post("https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails",my_obj)
         .then((response)=>{
-            console.log(response.data)
+            // console.log(response.data.ammount)
             display(response.data)})
         .catch((err)=>{console.log(err)});
       
@@ -81,10 +81,10 @@
     }
         
     document.addEventListener('DOMContentLoaded', (event) => {
-        axios.get("https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails")
+        axios.get("https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails")
         .then((response)=>{
             for(var i=0;i<response.data.length;i++){
-                // console.log(JSON.parse(response.data[i]._id));
+                console.log(response.data[i]._id);
                 display(response.data[i]);
             }
         })
@@ -117,14 +117,17 @@ function display(data_obj){
         let ed_description=document.getElementById("edit_description");
         let ed_category=document.getElementById("edit_category");
 
-        // let ammount_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
-        // let description_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
-        // let caegory_val=axios.get(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`);
+        let ammount_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
+        .then((response)=>{ed_ammount.value=response.data.ammount})
+        .catch((err)=>{console.log(err)});
+        let description_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
+        .then((response)=>{ed_description.value=response.data.description})
+        .catch((err)=>{console.log(err)});
+        let caegory_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
+        .then((response)=>{ed_category.value=response.data.category})
+        .catch((err)=>{console.log(err)});
 
-        // ed_ammount.value=ammount_val;
-        // ed_description.value=description_val;
-        // ed_category.value=caegory_val;
-        // console.log(ammount_val);
+        
 
         let ed_form=document.getElementById('edit_form');
         ed_form.addEventListener('submit',editDetails);
@@ -135,7 +138,7 @@ function display(data_obj){
             'description':ed_description.value,
             'category':ed_category.value
         };
-        axios.put(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`,my_editObj)
+        axios.put(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`,my_editObj)
         .then((response)=>{
             // console.log(response.data)
             display(response.data)})
@@ -147,7 +150,7 @@ function display(data_obj){
     
     function delUser(description){
         // localStorage.removeItem(description);
-        axios.delete(`https://crudcrud.com/api/ec082dadf971454f80d06ddd7986d3e9/formDetails/${description}`)
+        axios.delete(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
         invisibleing(description);
         console.log(description);
     }
