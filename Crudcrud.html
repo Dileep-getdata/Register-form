@@ -53,10 +53,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
 
 <script>
+    let crudUrl="https://crudcrud.com/api/5f1e0915fcf5441d96babd4fe80a001b"
     var myform=document.getElementById('addform');
     
     myform.addEventListener('submit',addDetails);
-    function addDetails(e){
+    async function addDetails(e){
+        try{
         e.preventDefault();
         var ammountI=document.getElementById('ammount');
         var descriptionI=document.getElementById('description');
@@ -67,27 +69,31 @@
             'category':categoryI.value
         };
         
-        axios.post("https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails",my_obj)
-        .then((response)=>{
-            // console.log(response.data.ammount)
-            display(response.data)})
-        .catch((err)=>{console.log(err)});
-      
-
+        const adding=await axios.post(`${crudUrl}/userDetails`,my_obj)
+        
+            display(adding.data)
         ammountI.value="";
         descriptionI.value="";
         categoryI.value="";
+        }
+        catch(err)
+
+        {console.log(err)};     
+
+        
     }
         
-    document.addEventListener('DOMContentLoaded', (event) => {
-        axios.get("https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails")
-        .then((response)=>{
+    document.addEventListener('DOMContentLoaded', async (event) => {
+        try{
+        const response=await axios.get(`${crudUrl}/userDetails`)
+        
             for(var i=0;i<response.data.length;i++){
                 // console.log(response.data[i]._id);
                 display(response.data[i]);
             }
-        })
-        .catch((err)=>{console.log(err)});
+        }
+        catch(err)
+            {console.log(err)};
         
        
 });
@@ -101,49 +107,72 @@
                 </li><br>`;
             represent.innerHTML=represent.innerHTML+li;
         }
-
-    function editUser(description){
-        let addedList=document.getElementById('Expense_list').style.display="none";
-        let addform=document.getElementById('addform').style.display="none";
-        let editForm=document.getElementById('edit_form').style.display="inline";        
-
         let ed_ammount=document.getElementById("edit_ammount");
         let ed_description=document.getElementById("edit_description");
         let ed_category=document.getElementById("edit_category");
+    async function editUser(description){
+        document.getElementById('Expense_list').style.display="none";
+        document.getElementById('addform').style.display="none";
+        document.getElementById('edit_form').style.display="inline";        
 
-        let ammount_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
-        .then((response)=>{ed_ammount.value=response.data.ammount})
-        .catch((err)=>{console.log(err)});
-        let description_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
-        .then((response)=>{ed_description.value=response.data.description})
-        .catch((err)=>{console.log(err)});
-        let caegory_val=axios.get(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
-        .then((response)=>{ed_category.value=response.data.category})
-        .catch((err)=>{console.log(err)});
-
+       
+        try{
+        let required_val=await axios.get(`${crudUrl}/userDetails/${description}`)
+        ed_ammount.value=required_val.data.ammount       
+        ed_description.value=required_val.data.description  
+        ed_category.value=required_val.data.category
+        }
+        catch(err){
+            console.log(err)};
+        
         
 
         let ed_form=document.getElementById('edit_form');
         ed_form.addEventListener('submit',editDetails);
-        function editDetails(){
+        async function editDetails(e){
+        try{
+            e.preventDefault();
             
             let my_editObj={
             'ammount':ed_ammount.value,
             'description':ed_description.value,
             'category':ed_category.value
-        };
-        axios.put(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`,my_editObj)
-        .then((response)=>{
-            // console.log(response.data)
-            display(response.data)})
-        .catch((err)=>{console.log(err)});
+            };
+            
+        const editing_val=await axios.put(`${crudUrl}/userDetails/${description}`,my_editObj)
+        
+        document.getElementById('Expense_list').style.display="inline";
+        document.getElementById('addform').style.display="inline";
+        document.getElementById('edit_form').style.display="none";
+        display(editing_val.data);  
+        document.addEventListener('DOMContentLoaded', async (event) => {
+        try{
+        const response=await axios.get(`${crudUrl}/userDetails`)
+        
+            for(var i=0;i<response.data.length;i++){
+                // console.log(response.data[i]._id);
+                display(response.data[i]);
+            }
+        }
+        catch(err)
+            {console.log(err)};
+        
+       
+});
+        
+
+        }
+        catch(err){
+            console.log(err)};
         
     }
-    }
+}
+
+    
     
     function delUser(description){
         
-        axios.delete(`https://crudcrud.com/api/5e875456d33d4addaf258e25028765b6/userDetails/${description}`)
+        axios.delete(`${crudUrl}/userDetails/${description}`)
         invisibleing(description);
         console.log(description);
     }
